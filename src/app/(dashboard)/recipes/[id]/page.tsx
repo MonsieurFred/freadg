@@ -1,22 +1,28 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getCurrentUserHouseholdSize, getRecipeWithIngredients } from '@/lib/recipes/queries'
+import { CATALOG_RECIPES } from '@/lib/recipes/mock-data'
 import { formatQuantity, formatSeason, formatTag } from '@/lib/recipes/labels'
 import { getRecipeImageUrl } from '@/lib/recipes/images'
 import FavoriteButton from '../FavoriteButton'
 import AddToWeekButton from '../AddToWeekButton'
 import DownloadRecipeButton from './DownloadRecipeButton'
 
+export const dynamicParams = false
+
 type RecipeDetailPageProps = {
   params: Promise<{ id: string }>
 }
 
+export function generateStaticParams() {
+  return CATALOG_RECIPES.map((recipe) => ({
+    id: recipe.id,
+  }))
+}
+
 export default async function RecipeDetailPage({ params }: RecipeDetailPageProps) {
   const { id } = await params
-  const [recipe, householdSize] = await Promise.all([
-    getRecipeWithIngredients(id),
-    getCurrentUserHouseholdSize(),
-  ])
+  const recipe = CATALOG_RECIPES.find((item) => item.id === id)
+  const householdSize = 2
 
   if (!recipe) notFound()
 
