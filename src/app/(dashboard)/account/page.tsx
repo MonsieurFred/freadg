@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { type UserProfile } from '@/types/database'
 import AccountForm from './AccountForm'
@@ -49,13 +48,25 @@ async function getProfile(): Promise<{ profile: UserProfile; email: string }> {
     }
   }
 
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user = null
+  let supabase = null
+
+  try {
+    supabase = await createClient()
+    const result = await supabase.auth.getUser()
+    user = result.data.user
+  } catch {
+    return {
+      profile: { ...FALLBACK_PROFILE, id: 'demo-user', email: 'demo@fridge.app' },
+      email: 'demo@fridge.app',
+    }
+  }
 
   if (!user) {
-    redirect('/login')
+    return {
+      profile: { ...FALLBACK_PROFILE, id: 'demo-user', email: 'demo@fridge.app' },
+      email: 'demo@fridge.app',
+    }
   }
 
   const { data: profile } = await supabase

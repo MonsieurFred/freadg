@@ -8,11 +8,15 @@ export default async function MyWeekPage() {
   let userId = ''
 
   if (isSupabaseConfigured()) {
-    const supabase = await createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    userId = user?.id ?? ''
+    try {
+      const supabase = await createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      userId = user?.id ?? ''
+    } catch {
+      userId = ''
+    }
   }
 
   const [initialPlan, availableRecipes] = await Promise.all([

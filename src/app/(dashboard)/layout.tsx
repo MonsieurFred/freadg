@@ -15,9 +15,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
   let isAdmin = false
 
   if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    isAdmin = user?.app_metadata?.role === 'admin'
+    try {
+      const supabase = await createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      isAdmin = user?.app_metadata?.role === 'admin'
+    } catch {
+      isAdmin = false
+    }
   }
 
   const navLinks = isAdmin

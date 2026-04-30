@@ -9,7 +9,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser().catch(() => ({ data: { user: null } }))
 
   if (!user || user.app_metadata?.role !== 'admin') {
     redirect('/dashboard')
