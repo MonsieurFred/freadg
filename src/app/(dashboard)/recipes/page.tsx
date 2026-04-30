@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { getRecipes } from '@/lib/recipes/queries'
+import { PHOTO_CATALOG_RECIPES } from '@/lib/recipes/mock-data'
+import { getRecipeImageUrl } from '@/lib/recipes/images'
 import RecipeCard from './RecipeCard'
 
 const TAG_FILTERS = [
@@ -18,31 +19,11 @@ const SEASON_FILTERS = [
   { value: 'winter', label: 'Hiver' },
 ]
 
-type RecipesPageProps = {
-  searchParams: Promise<{
-    q?: string
-    tag?: string
-    season?: string
-    maxTime?: string
-    maxCalories?: string
-    sort?: string
-  }>
-}
-
-export default async function RecipesPage({ searchParams }: RecipesPageProps) {
-  const sp = await searchParams
-  const maxTime = sp.maxTime ? Number(sp.maxTime) : undefined
-  const maxCalories = sp.maxCalories ? Number(sp.maxCalories) : undefined
-  const recipes = await getRecipes({
-    search: sp.q,
-    tag: sp.tag,
-    season: sp.season,
-    maxTime: Number.isFinite(maxTime) ? maxTime : undefined,
-    maxCalories: Number.isFinite(maxCalories) ? maxCalories : undefined,
-    sort: sp.sort,
-  })
-
-  const hasFilters = Boolean(sp.q || sp.tag || sp.season || sp.maxTime || sp.maxCalories)
+export default function RecipesPage() {
+  const recipes = PHOTO_CATALOG_RECIPES.map((recipe) => ({
+    ...recipe,
+    photo_url: getRecipeImageUrl(recipe.title, recipe.photo_url),
+  }))
 
   return (
     <div style={{ fontFamily: 'var(--font-sans)' }}>
@@ -58,7 +39,6 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
               <input
                 type="search"
                 name="q"
-                defaultValue={sp.q}
                 placeholder="Rechercher une recette…"
                 className="input"
                 style={{ width: 220 }}
@@ -66,11 +46,6 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
               <button type="submit" className="btn-primary" style={{ fontSize: 13, padding: '10px 18px' }}>
                 Filtrer
               </button>
-              {hasFilters && (
-                <Link href="/recipes" className="btn-secondary" style={{ fontSize: 13, padding: '10px 16px' }}>
-                  Reset
-                </Link>
-              )}
             </form>
           </div>
         </div>
@@ -80,14 +55,9 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
           {/* Tag chips */}
           <div className="flex gap-2">
             {TAG_FILTERS.map((f) => {
-              const active = f.value === '' ? !sp.tag : sp.tag === f.value
+              const active = f.value === ''
               const params = new URLSearchParams()
-              if (sp.q) params.set('q', sp.q)
               if (f.value) params.set('tag', f.value)
-              if (sp.season) params.set('season', sp.season)
-              if (sp.maxTime) params.set('maxTime', sp.maxTime)
-              if (sp.maxCalories) params.set('maxCalories', sp.maxCalories)
-              if (sp.sort) params.set('sort', sp.sort)
               return (
                 <Link
                   key={f.value || 'all-tags'}
@@ -115,14 +85,9 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
           {/* Season chips */}
           <div className="flex gap-2">
             {SEASON_FILTERS.map((f) => {
-              const active = f.value === '' ? !sp.season : sp.season === f.value
+              const active = f.value === ''
               const params = new URLSearchParams()
-              if (sp.q) params.set('q', sp.q)
-              if (sp.tag) params.set('tag', sp.tag)
               if (f.value) params.set('season', f.value)
-              if (sp.maxTime) params.set('maxTime', sp.maxTime)
-              if (sp.maxCalories) params.set('maxCalories', sp.maxCalories)
-              if (sp.sort) params.set('sort', sp.sort)
               return (
                 <Link
                   key={f.value || 'all-seasons'}
