@@ -12,9 +12,13 @@ const BASE_NAV = [
 ]
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const isAdmin = user?.app_metadata?.role === 'admin'
+  let isAdmin = false
+
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    isAdmin = user?.app_metadata?.role === 'admin'
+  }
 
   const navLinks = isAdmin
     ? [...BASE_NAV, { href: '/admin', label: 'Admin' }]
