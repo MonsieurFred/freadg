@@ -2,26 +2,125 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --font-serif: 'DM Serif Display', serif;
+    --font-sans: 'DM Sans', sans-serif;
+
+    --ink:        #17211b;
+    --cream:      #fffaf2;
+    --sand:       #f5ede0;
+    --green:      #0f7a4a;
+    --green-pale: #e8f4ed;
+    --coral:      #ff6f4e;
+    --coral-pale: #fff0eb;
+    --peach:      #ffbd9d;
+    --border:     rgba(23,33,27,0.1);
+    --muted:      rgba(23,33,27,0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans), 'DM Sans', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .serif {
+    font-family: var(--font-serif), 'DM Serif Display', serif;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer components {
+  /* ── Buttons ─────────────────────────────────── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-white cursor-pointer transition-opacity hover:opacity-90;
+    background: var(--coral);
+    border-radius: 4px;
   }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold cursor-pointer transition-colors;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--ink);
+    background: white;
+  }
+  .btn-secondary:hover { background: var(--sand); }
+
+  /* Keep legacy names working */
+  .primary-button { @apply btn-primary; }
+  .secondary-button { @apply btn-secondary; }
+
+  /* ── Eyebrow label ────────────────────────────── */
+  .eyebrow {
+    @apply text-[10px] font-bold uppercase tracking-[0.18em];
+    color: var(--green);
+  }
+  .eyebrow-coral {
+    @apply text-[10px] font-bold uppercase tracking-[0.18em];
+    color: var(--coral);
+  }
+
+  /* ── Tag chip ─────────────────────────────────── */
+  .tag-green {
+    @apply inline-block px-2.5 py-0.5 text-[11px] font-bold;
+    background: var(--green-pale);
+    color: var(--green);
+    border-radius: 4px;
+  }
+  .tag-sand {
+    @apply inline-block px-2.5 py-0.5 text-[11px] font-bold;
+    background: var(--sand);
+    color: var(--ink);
+    border-radius: 4px;
+  }
+
+  /* ── Card ─────────────────────────────────────── */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .favorite-hover-action {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+  }
+
+  .recipe-hover-card:hover .favorite-hover-action,
+  .recipe-hover-card:focus-within .favorite-hover-action {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  @media (hover: none) {
+    .favorite-hover-action {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+  }
+
+  /* ── Input ────────────────────────────────────── */
+  .input {
+    @apply w-full px-4 py-3 text-sm font-medium outline-none transition;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--ink);
+  }
+  .input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(15,122,74,0.1);
+  }
+  .input::placeholder { color: var(--muted); }
+
+  /* ── App shell ────────────────────────────────── */
+  .app-shell { font-family: var(--font-sans), 'DM Sans', sans-serif; }
 }
