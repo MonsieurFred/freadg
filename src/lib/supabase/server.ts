@@ -3,7 +3,10 @@ import { cookies } from 'next/headers'
 import { type Database } from '@/types/database'
 
 export function isSupabaseConfigured() {
-  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+  return (
+    process.env.NEXT_PUBLIC_ENABLE_SUPABASE === 'true' &&
+    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+  )
 }
 
 export function isSupabaseAdminConfigured() {

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import NavLinks from './NavLinks'
 
 const BASE_NAV = [
@@ -14,7 +14,7 @@ const BASE_NAV = [
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   let isAdmin = false
 
-  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  if (isSupabaseConfigured()) {
     try {
       const supabase = await createClient()
       const { data: { user } } = await supabase.auth.getUser()

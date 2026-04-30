@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  if (!supabaseUrl || !supabaseAnonKey) {
+  if (process.env.NEXT_PUBLIC_ENABLE_SUPABASE !== 'true' || !supabaseUrl || !supabaseAnonKey) {
     return response
   }
 
