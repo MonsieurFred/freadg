@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { type UserProfile } from '@/types/database'
 import AccountForm from './AccountForm'
 
@@ -35,13 +35,20 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
       )}
 
       <div style={{ maxWidth: 560 }}>
-        <AccountForm profile={profile} userEmail={email} />
+        <AccountForm profile={profile} userEmail={email} demoMode={!isSupabaseConfigured()} />
       </div>
     </div>
   )
 }
 
 async function getProfile(): Promise<{ profile: UserProfile; email: string }> {
+  if (!isSupabaseConfigured()) {
+    return {
+      profile: { ...FALLBACK_PROFILE, id: 'demo-user', email: 'demo@fridge.app' },
+      email: 'demo@fridge.app',
+    }
+  }
+
   const supabase = await createClient()
   const {
     data: { user },

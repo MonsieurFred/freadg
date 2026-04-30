@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { readFavoriteIds, writeFavoriteIds } from '@/lib/favorites/storage'
-import { createClient } from '@/lib/supabase/client'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
 
 export default function FavoriteButton({
   recipeId,
@@ -18,7 +18,7 @@ export default function FavoriteButton({
   useEffect(() => {
     setIsFavorite(readFavoriteIds().includes(recipeId))
 
-    if (recipeId.startsWith('mock-')) return
+    if (recipeId.startsWith('mock-') || !isSupabaseConfigured()) return
 
     const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -45,7 +45,7 @@ export default function FavoriteButton({
     writeFavoriteIds(nextFavoriteIds)
     setIsFavorite(!isFavorite)
 
-    if (!userId || recipeId.startsWith('mock-')) {
+    if (!userId || recipeId.startsWith('mock-') || !isSupabaseConfigured()) {
       setLoading(false)
       return
     }

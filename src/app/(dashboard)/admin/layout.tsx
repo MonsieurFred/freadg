@@ -1,7 +1,11 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  if (!isSupabaseConfigured()) {
+    redirect('/dashboard')
+  }
+
   const supabase = await createClient()
   const {
     data: { user },

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
 
 const DIETARY_OPTIONS = [
   { value: 'vegetarian', label: 'Végétarien' },
@@ -46,6 +46,12 @@ export default function RegisterPage() {
     setError(null)
     setLoading(true)
 
+    if (!isSupabaseConfigured()) {
+      router.push('/dashboard')
+      router.refresh()
+      return
+    }
+
     const supabase = createClient()
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
@@ -78,6 +84,12 @@ export default function RegisterPage() {
   }
 
   async function handleGoogle() {
+    if (!isSupabaseConfigured()) {
+      router.push('/dashboard')
+      router.refresh()
+      return
+    }
+
     const supabase = createClient()
     await supabase.auth.signInWithOAuth({
       provider: 'google',

@@ -1,25 +1,27 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { type Recipe } from '@/types/database'
 import FavoritesClient from './FavoritesClient'
 
 export default async function FavoritesPage() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
   let favoriteRecipes: Recipe[] = []
 
-  if (user) {
-    const { data } = await supabase
-      .from('user_favorites')
-      .select('recipe:recipes(*)')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
+  if (isSupabaseConfigured()) {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-    favoriteRecipes = (data ?? [])
-      .map((row) => (row.recipe as unknown) as Recipe | null)
-      .filter((r): r is Recipe => r !== null)
+    if (user) {
+      const { data } = await supabase
+        .from('user_favorites')
+        .select('recipe:recipes(*)')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      favoriteRecipes = (data ?? [])
+        .map((row) => (row.recipe as unknown) as Recipe | null)
+        .filter((r): r is Recipe => r !== null)
+    }
   }
 
   return (

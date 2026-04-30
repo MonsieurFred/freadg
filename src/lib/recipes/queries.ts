@@ -1,9 +1,9 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, isSupabaseAdminConfigured, isSupabaseConfigured } from '@/lib/supabase/server'
 import { type Ingredient, type MealType, type Recipe, type RecipeWithIngredients } from '@/types/database'
 import { CATALOG_RECIPES, filterMockRecipes, MOCK_RECIPES, WEEK_RECIPES } from './mock-data'
 import { getRecipeImageUrl } from './images'
 
-const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA !== 'false'
+const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA !== 'false' || !isSupabaseConfigured()
 
 export type RecipeFilters = {
   search?: string
@@ -247,7 +247,7 @@ export async function getRecipeStats() {
   const vegetarianRecipes = recipes.filter((recipe) => recipe.tags.includes('vegetarian')).length
 
   let estimatedActiveSubscribers = 0
-  if (!USE_MOCK_DATA) {
+  if (!USE_MOCK_DATA && isSupabaseAdminConfigured()) {
     const { createAdminClient } = await import('@/lib/supabase/server')
     const admin = createAdminClient()
     const { count } = await admin

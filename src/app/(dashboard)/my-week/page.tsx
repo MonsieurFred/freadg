@@ -1,14 +1,19 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { getCurrentWeekRecipes, getUserMealPlanForWeek, getWeekStartDate } from '@/lib/recipes/queries'
 import WeekPlannerClient from './WeekPlannerClient'
 
 export default async function MyWeekPage() {
   const weekStartDate = getWeekStartDate()
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let userId = ''
+
+  if (isSupabaseConfigured()) {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    userId = user?.id ?? ''
+  }
 
   const [initialPlan, availableRecipes] = await Promise.all([
     getUserMealPlanForWeek(weekStartDate),
@@ -32,7 +37,7 @@ export default async function MyWeekPage() {
       <WeekPlannerClient
         initialPlan={initialPlan}
         availableRecipes={availableRecipes}
-        userId={user?.id ?? ''}
+        userId={userId}
         weekStartDate={weekStartDate}
       />
     </div>

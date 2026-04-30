@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -16,6 +16,12 @@ export default function LoginPage() {
     e.preventDefault()
     setError(null)
     setLoading(true)
+
+    if (!isSupabaseConfigured()) {
+      router.push('/dashboard')
+      router.refresh()
+      return
+    }
 
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -35,6 +41,12 @@ export default function LoginPage() {
   }
 
   async function handleGoogle() {
+    if (!isSupabaseConfigured()) {
+      router.push('/dashboard')
+      router.refresh()
+      return
+    }
+
     const supabase = createClient()
     await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -59,6 +71,11 @@ export default function LoginPage() {
 
         <div className="eyebrow mb-3">Connexion</div>
         <h1 className="serif mb-9" style={{ fontSize: 40, color: 'var(--ink)', lineHeight: 1.1 }}>Bon retour.</h1>
+        {!isSupabaseConfigured() && (
+          <div className="mb-5 max-w-[380px] px-4 py-3" style={{ background: 'var(--green-pale)', borderRadius: 4, fontSize: 13, fontWeight: 600, color: 'var(--green)' }}>
+            Mode présentation: clique sur connexion pour entrer dans la démo.
+          </div>
+        )}
 
         <div className="flex flex-col gap-4 max-w-[380px]">
           <button
