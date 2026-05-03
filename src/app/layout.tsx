@@ -18,7 +18,7 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Fridge — Planification de repas hebdomadaires',
+  title: 'Freadg — Planification de repas hebdomadaires',
   description: 'Planifiez des repas sains, complets et équilibrés, puis générez votre liste de courses automatiquement.',
 }
 

@@ -66,7 +66,7 @@ export default function LoginPage() {
             className="flex shrink-0 items-center justify-center serif"
             style={{ width: 30, height: 30, background: 'var(--ink)', color: 'var(--peach)', fontSize: 16 }}
           >F</span>
-          <span className="serif" style={{ fontSize: 18, color: 'var(--ink)' }}>Fridge</span>
+          <span className="serif" style={{ fontSize: 18, color: 'var(--ink)' }}>Freadg</span>
         </Link>
 
         <div className="eyebrow mb-3">Connexion</div>
@@ -166,7 +166,7 @@ export default function LoginPage() {
           <div className="serif" style={{ fontSize: 28, color: '#fff', lineHeight: 1.3, marginBottom: 12 }}>
             &ldquo;La meilleure façon de bien manger, c&apos;est de bien planifier.&rdquo;
           </div>
-          <div style={{ fontSize: 12, color: 'var(--peach)', fontWeight: 600 }}>— L&apos;équipe Fridge</div>
+          <div style={{ fontSize: 12, color: 'var(--peach)', fontWeight: 600 }}>— L&apos;équipe Freadg</div>
         </div>
       </div>
     </div>

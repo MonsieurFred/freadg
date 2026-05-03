@@ -62,7 +62,7 @@ function buildRecipePdfHtml(recipe: RecipeWithIngredients, householdSize: number
     <html lang="fr">
       <head>
         <meta charset="utf-8" />
-        <title>${escapeHtml(recipe.title)} - Fridge</title>
+        <title>${escapeHtml(recipe.title)} - Freadg</title>
         <style>
           @page { size: A4; margin: 16mm; }
           * { box-sizing: border-box; }
@@ -189,7 +189,7 @@ function buildRecipePdfHtml(recipe: RecipeWithIngredients, householdSize: number
         <article class="sheet">
           <img src="${escapeAttribute(imageUrl)}" alt="" />
           <div class="content">
-            <div class="brand">Fridge · Recette complète</div>
+            <div class="brand">Freadg · Recette complète</div>
             <h1>${escapeHtml(recipe.title)}</h1>
             <p class="description">${escapeHtml(recipe.description)}</p>
             <div class="chips">${tags}</div>
@@ -209,7 +209,7 @@ function buildRecipePdfHtml(recipe: RecipeWithIngredients, householdSize: number
                 <ol class="steps">${steps}</ol>
               </section>
             </div>
-            <div class="footer">Fiche générée par Fridge. Enregistre cette page en PDF depuis la fenêtre d’impression.</div>
+            <div class="footer">Fiche générée par Freadg. Enregistre cette page en PDF depuis la fenêtre d’impression.</div>
           </div>
         </article>
         <script>

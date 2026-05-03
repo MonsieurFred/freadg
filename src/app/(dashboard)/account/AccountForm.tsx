@@ -194,7 +194,7 @@ export default function AccountForm({
               ))}
             </div>
             <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
-              Fridge pourra ensuite privilégier les recettes compatibles avec ce que tu as déjà dans ta cuisine.
+              Freadg pourra ensuite privilégier les recettes compatibles avec ce que tu as déjà dans ta cuisine.
             </p>
           </div>
 

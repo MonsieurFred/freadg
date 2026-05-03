@@ -46,7 +46,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           >
             F
           </span>
-          <span className="serif text-lg" style={{ color: 'var(--ink)' }}>Fridge</span>
+          <span className="serif text-lg" style={{ color: 'var(--ink)' }}>Freadg</span>
         </Link>
 
         <NavLinks links={navLinks} />

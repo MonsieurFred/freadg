@@ -209,7 +209,7 @@ export default function ShoppingListClient({ initialShoppingList, weekStartDate 
                 Services disponibles
               </div>
               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.64)', lineHeight: 1.45, marginBottom: 12 }}>
-                Fridge peut préparer ta liste pour livraison ou click & collect selon les magasins disponibles.
+                Freadg peut préparer ta liste pour livraison ou click & collect selon les magasins disponibles.
               </div>
 
               {favoriteStore ? (

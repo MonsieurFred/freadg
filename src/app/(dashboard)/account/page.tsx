@@ -13,7 +13,7 @@ const FALLBACK_PROFILE: UserProfile = {
 }
 
 export default function AccountPage() {
-  const profile = { ...FALLBACK_PROFILE, id: 'demo-user', email: 'demo@fridge.app' }
+  const profile = { ...FALLBACK_PROFILE, id: 'demo-user', email: 'demo@freadg.app' }
 
   return (
     <div className="px-8 py-8 lg:px-10 lg:py-9">
@@ -21,7 +21,7 @@ export default function AccountPage() {
       <h1 className="serif mb-6" style={{ fontSize: 34, color: 'var(--ink)' }}>Mon compte</h1>
 
       <div style={{ maxWidth: 560 }}>
-        <AccountForm profile={profile} userEmail="demo@fridge.app" demoMode />
+        <AccountForm profile={profile} userEmail="demo@freadg.app" demoMode />
       </div>
     </div>
   )

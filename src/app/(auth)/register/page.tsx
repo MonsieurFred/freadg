@@ -138,7 +138,7 @@ export default function RegisterPage() {
             className="flex shrink-0 items-center justify-center serif"
             style={{ width: 30, height: 30, background: 'var(--ink)', color: 'var(--peach)', fontSize: 16 }}
           >F</span>
-          <span className="serif" style={{ fontSize: 18, color: 'var(--ink)' }}>Fridge</span>
+          <span className="serif" style={{ fontSize: 18, color: 'var(--ink)' }}>Freadg</span>
         </Link>
 
         {/* Step indicator */}
@@ -334,7 +334,7 @@ export default function RegisterPage() {
           <div className="serif" style={{ fontSize: 28, color: '#fff', lineHeight: 1.3, marginBottom: 12 }}>
             Des repas sains,<br />toute la semaine.
           </div>
-          <div style={{ fontSize: 12, color: 'var(--peach)', fontWeight: 600 }}>— L&apos;équipe Fridge</div>
+          <div style={{ fontSize: 12, color: 'var(--peach)', fontWeight: 600 }}>— L&apos;équipe Freadg</div>
         </div>
       </div>
     </div>

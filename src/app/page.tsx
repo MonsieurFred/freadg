@@ -31,7 +31,7 @@ export default function LandingPage() {
       <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 48px', borderBottom: '1px solid var(--border)', background: 'var(--cream)' }} className="px-5 md:px-12">
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
           <span style={{ width: 34, height: 34, background: 'var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--peach)', fontFamily: 'var(--font-serif)', fontSize: 18, flexShrink: 0 }}>F</span>
-          <span style={{ fontFamily: 'var(--font-serif)', fontSize: 20, color: 'var(--ink)' }}>Fridge</span>
+          <span style={{ fontFamily: 'var(--font-serif)', fontSize: 20, color: 'var(--ink)' }}>Freadg</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8" style={{ fontSize: 13, fontWeight: 600, color: 'var(--muted)' }}>
           <Link href="#comment-ca-marche" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Comment ça marche</Link>
@@ -63,7 +63,7 @@ export default function LandingPage() {
             Des repas sains, complets et équilibrés, pensés par un chef cuisinier pour apporter au corps ce qu’il faut: protéines, fibres, légumes et énergie durable.
           </p>
           <div className="flex flex-wrap gap-3 mt-9">
-            <Link href="/register" className="btn-primary">Essayer Fridge</Link>
+            <Link href="/register" className="btn-primary">Essayer Freadg</Link>
             <Link href="/dashboard" className="btn-secondary">Voir la sélection →</Link>
           </div>
           {/* Stats */}
@@ -172,7 +172,7 @@ export default function LandingPage() {
         <div className="px-12 py-14" style={{ borderRight: '1px solid var(--border)' }}>
           <div className="eyebrow-coral mb-4">Abonnement simple</div>
           <h2 className="serif" style={{ fontSize: 42, color: 'var(--ink)', lineHeight: 1.1, maxWidth: 400, marginBottom: 16 }}>
-            Tout Fridge pour 6,99 € / mois.
+            Tout Freadg pour 6,99 € / mois.
           </h2>
           <p style={{ fontSize: 15, lineHeight: 1.75, color: 'var(--muted)', maxWidth: 380 }}>
             Recettes équilibrées, planning, favoris, quantités ajustées, liste de courses automatique et préparation possible en click & collect dans tes magasins préférés. De la vraie bonne nourriture pour le corps, sans pub ni menus impossibles.
