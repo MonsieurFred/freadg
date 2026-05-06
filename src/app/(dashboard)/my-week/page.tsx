@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
-import { getCurrentWeekRecipes, getUserMealPlanForWeek, getWeekStartDate } from '@/lib/recipes/queries'
+import { getCurrentWeekRecipes, getDemoUserId, getUserMealPlanForWeek, getWeekStartDate } from '@/lib/recipes/queries'
 import WeekPlannerClient from './WeekPlannerClient'
 
 export default async function MyWeekPage() {
   const weekStartDate = getWeekStartDate()
-  let userId = ''
+  let userId = await getDemoUserId()
 
-  if (isSupabaseConfigured()) {
+  if (!userId && isSupabaseConfigured()) {
     try {
       const supabase = await createClient()
       const {

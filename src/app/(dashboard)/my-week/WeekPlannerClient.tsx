@@ -113,6 +113,17 @@ export default function WeekPlannerClient({ initialPlan, availableRecipes, userI
 
     setLoading(true)
     setError(null)
+
+    const demoResult = await addDemoMeal(recipe, weekStartDate, pickerSlot.day, pickerSlot.mealType)
+    const demoPlanId = demoResult.status === 'added' ? demoResult.id : ''
+    if (demoPlanId) {
+      setPlan((prev) => new Map(prev).set(key, { recipe, planId: demoPlanId }))
+      setPickerSlot(null)
+      setPickerSearch('')
+      setLoading(false)
+      return
+    }
+
     const supabase = createClient()
     const { data, error: insertError } = await supabase
       .from('user_meal_plans')
@@ -147,6 +158,13 @@ export default function WeekPlannerClient({ initialPlan, availableRecipes, userI
     }
     setLoading(true)
     setError(null)
+
+    if (await removeDemoMeal(meal.planId)) {
+      setPlan((prev) => { const next = new Map(prev); next.delete(key); return next })
+      setLoading(false)
+      return
+    }
+
     const supabase = createClient()
     const { error: deleteError } = await supabase
       .from('user_meal_plans')
@@ -511,6 +529,45 @@ function parseSlotKey(slotKey: SlotKey): [number, MealType] {
 
 function isMockRecipe(recipe: Recipe) {
   return recipe.id.startsWith('mock-')
+}
+
+async function addDemoMeal(recipe: Recipe, weekStartDate: string, dayOfWeek: number, mealType: MealType) {
+  if (isMockRecipe(recipe)) return { status: 'fallback' as const }
+
+  try {
+    const response = await fetch('/api/demo/meal-plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipeId: recipe.id, weekStartDate, dayOfWeek, mealType }),
+    })
+
+    if (!response.ok) return { status: 'fallback' as const }
+
+    const result = await response.json() as { status?: string; id?: string }
+    if (result.status === 'added') {
+      return { status: 'added' as const, id: result.id }
+    }
+  } catch {
+    return { status: 'fallback' as const }
+  }
+
+  return { status: 'fallback' as const }
+}
+
+async function removeDemoMeal(planId: string) {
+  if (planId.startsWith('local-')) return false
+
+  try {
+    const response = await fetch('/api/demo/meal-plan', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ planId }),
+    })
+
+    return response.ok
+  } catch {
+    return false
+  }
 }
 
 function shouldPersistLocally(meal: PlannedMeal, userId: string) {

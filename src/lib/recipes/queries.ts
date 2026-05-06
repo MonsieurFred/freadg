@@ -1,7 +1,8 @@
-import { createClient, isSupabaseAdminConfigured, isSupabaseConfigured } from '@/lib/supabase/server'
+import { createAdminClient, createClient, isSupabaseAdminConfigured, isSupabaseConfigured } from '@/lib/supabase/server'
 import { type Ingredient, type MealType, type Recipe, type RecipeWithIngredients } from '@/types/database'
 import { CATALOG_RECIPES, filterMockRecipes, MOCK_RECIPES, WEEK_RECIPES } from './mock-data'
 import { getRecipeImageUrl } from './images'
+import { getWeekStartDate as getBrusselsWeekStartDate } from '@/lib/dates/week'
 
 const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA !== 'false' || !isSupabaseConfigured()
 
@@ -23,12 +24,7 @@ export type MealPlanWithRecipe = {
 }
 
 export function getWeekStartDate(): string {
-  const today = new Date()
-  const day = today.getDay()
-  const diff = day === 0 ? -6 : 1 - day
-  const monday = new Date(today)
-  monday.setDate(today.getDate() + diff)
-  return monday.toISOString().slice(0, 10)
+  return getBrusselsWeekStartDate()
 }
 
 export async function getRecipes(filters: RecipeFilters = {}) {
@@ -94,7 +90,42 @@ export async function getCurrentUserHouseholdSize() {
 }
 
 export async function getCurrentWeekRecipes() {
-  return withRecipeImages(WEEK_RECIPES.slice(0, 20))
+  if (USE_MOCK_DATA) {
+    return withRecipeImages(WEEK_RECIPES.slice(0, 20))
+  }
+
+  const supabase = await createClient()
+  const weekStartDate = getWeekStartDate()
+  const { data, error } = await supabase
+    .from('weekly_selection')
+    .select('recipes(*)')
+    .eq('week_start_date', weekStartDate)
+    .limit(20)
+
+  if (error || !data?.length) {
+    return withRecipeImages(WEEK_RECIPES.slice(0, 20))
+  }
+
+  const recipes = data
+    .map((item) => item.recipes)
+    .filter(Boolean) as unknown as Recipe[]
+
+  return withRecipeImages(recipes)
+}
+
+export async function getDemoUserId() {
+  if (!isSupabaseAdminConfigured()) return ''
+
+  const admin = createAdminClient()
+  const { data, error } = await admin
+    .from('users')
+    .select('id')
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .maybeSingle()
+
+  if (error || !data) return ''
+  return data.id
 }
 
 export async function getUserMealPlanForWeek(weekStartDate: string): Promise<MealPlanWithRecipe[]> {
@@ -107,12 +138,16 @@ export async function getUserMealPlanForWeek(weekStartDate: string): Promise<Mea
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return []
+  const demoUserId = await getDemoUserId()
+  const userId = demoUserId || user?.id || ''
 
-  const { data, error } = await supabase
+  if (!userId) return []
+
+  const client = demoUserId ? createAdminClient() : supabase
+  const { data, error } = await client
     .from('user_meal_plans')
     .select('id, day_of_week, meal_type, recipe_id, recipes(*)')
-    .eq('user_id', user.id)
+    .eq('user_id', userId)
     .eq('week_start_date', weekStartDate)
 
   if (error || !data) return []
